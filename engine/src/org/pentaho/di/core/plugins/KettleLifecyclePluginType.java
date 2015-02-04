@@ -125,4 +125,10 @@ public class KettleLifecyclePluginType extends BasePluginType implements PluginT
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (KettleLifecyclePlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

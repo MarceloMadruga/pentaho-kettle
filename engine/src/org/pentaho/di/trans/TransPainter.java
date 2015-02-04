@@ -690,9 +690,9 @@ public class TransPainter extends BasePainter {
     if ( stepError ) {
       gc.setForeground( EColor.RED );
     } else {
-      gc.setForeground( EColor.BLACK );
+      gc.setForeground( EColor.DARKBLUE );
     }
-    gc.drawRectangle( x - 1, y - 1, iconsize + 1, iconsize + 1 );
+    gc.drawRoundRectangle( x - 1, y - 1, iconsize + 1, iconsize + 1, 8, 8 );
 
     Point namePosition = getNamePosition( name, screen, iconsize );
 
@@ -952,7 +952,7 @@ public class TransPainter extends BasePainter {
           linestyle = ELineStyle.DOT;
           activeLinewidth = linewidth + 1;
         } else {
-          col = EColor.BLACK;
+          col = EColor.DARKBLUE;
         }
       } else {
         col = EColor.GRAY;

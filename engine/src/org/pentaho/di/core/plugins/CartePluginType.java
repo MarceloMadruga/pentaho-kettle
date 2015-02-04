@@ -194,4 +194,10 @@ public class CartePluginType extends BasePluginType implements PluginTypeInterfa
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (CarteServlet) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

@@ -50,6 +50,8 @@ public @interface JobEntry {
 
   String image();
 
+  String svgImage() default "";
+
   String version() default "";
 
   int category() default -1;

@@ -55,6 +55,8 @@ public @interface Step {
 
   String image();
 
+  String svgImage() default "";
+
   /**
    * @return True if a separate class loader is needed every time this class is instantiated
    */

@@ -155,4 +155,10 @@ public class LogTablePluginType extends BasePluginType implements PluginTypeInte
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (LogTablePlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

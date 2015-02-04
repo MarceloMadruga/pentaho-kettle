@@ -165,4 +165,10 @@ public class CompressionPluginType extends BasePluginType implements PluginTypeI
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (CompressionPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

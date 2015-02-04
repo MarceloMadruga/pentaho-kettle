@@ -129,4 +129,9 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
 
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

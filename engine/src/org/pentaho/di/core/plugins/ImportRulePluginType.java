@@ -165,4 +165,10 @@ public class ImportRulePluginType extends BasePluginType implements PluginTypeIn
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (ImportRulePlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

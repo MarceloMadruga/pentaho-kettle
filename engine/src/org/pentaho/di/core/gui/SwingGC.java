@@ -52,7 +52,6 @@ import org.pentaho.di.laf.BasePropertyHandler;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
 
-
 public class SwingGC implements GCInterface {
 
   private static BufferedImage imageLocked;
@@ -112,6 +111,7 @@ public class SwingGC implements GCInterface {
   protected Color lightGray;
   protected Color darkGray;
   protected Color lightBlue;
+  protected Color darkBlue;
 
   private Graphics2D gc;
 
@@ -145,7 +145,7 @@ public class SwingGC implements GCInterface {
   private AffineTransform originalTransform;
 
   private SwingGC( BufferedImage image, Graphics2D gc, ImageObserver observer,
-      Point area, int iconsize, int xOffset, int yOffset ) throws KettleException {
+    Point area, int iconsize, int xOffset, int yOffset ) throws KettleException {
     this.image = image;
     this.gc = gc;
     if ( gc == null && image != null ) {
@@ -165,12 +165,12 @@ public class SwingGC implements GCInterface {
 
   public SwingGC( ImageObserver observer, Point area, int iconsize, int xOffset, int yOffset ) throws KettleException {
     this( new BufferedImage( area.x, area.y, BufferedImage.TYPE_INT_RGB ), null, observer,
-        area, iconsize, xOffset, yOffset );
+      area, iconsize, xOffset, yOffset );
   }
 
   public SwingGC( Graphics2D gc, Rectangle2D rect, int iconsize, int xOffset, int yOffset ) throws KettleException {
     this( null, gc, null,
-        new Point( (int) rect.getWidth(), (int) rect.getHeight() ), iconsize, xOffset, yOffset );
+      new Point( (int) rect.getWidth(), (int) rect.getHeight() ), iconsize, xOffset, yOffset );
   }
 
   private void init() throws KettleException {
@@ -190,6 +190,7 @@ public class SwingGC implements GCInterface {
     this.lightGray = new Color( 200, 200, 200 );
     this.darkGray = new Color( 80, 80, 80 );
     this.lightBlue = new Color( 135, 206, 250 ); // light sky blue
+    this.darkBlue = new Color( 0, 0, 200 );
 
     imageLocked = getImageIcon( BasePropertyHandler.getProperty( "Locked_image" ) );
     imageStepError = getImageIcon( BasePropertyHandler.getProperty( "StepErrorLines_image" ) );
@@ -301,10 +302,10 @@ public class SwingGC implements GCInterface {
           gc.setColor( new Color( cm.getRed( pix ), cm.getGreen( pix ), cm.getBlue( pix ) ) ); //, cm.getAlpha( pixel )
           gc.setStroke( new BasicStroke( 1.0f ) );
           gc.drawLine(
-              locationX + xOffset + x,
-              locationY + yOffset + y,
-              locationX + xOffset + x + 1,
-              locationY + yOffset + y + 1 );
+            locationX + xOffset + x,
+            locationY + yOffset + y,
+            locationX + xOffset + x + 1,
+            locationY + yOffset + y + 1 );
         }
       }
     } else {

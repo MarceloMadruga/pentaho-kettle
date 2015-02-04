@@ -150,4 +150,10 @@ public class LifecyclePluginType extends BasePluginType implements PluginTypeInt
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (LifecyclePlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

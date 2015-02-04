@@ -135,4 +135,10 @@ public class RowDistributionPluginType extends BasePluginType implements PluginT
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (RowDistributionPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

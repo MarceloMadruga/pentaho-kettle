@@ -151,4 +151,9 @@ public class AuthenticationProviderPluginType extends BasePluginType implements 
     return "";
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

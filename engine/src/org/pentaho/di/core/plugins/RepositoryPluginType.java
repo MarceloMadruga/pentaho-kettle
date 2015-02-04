@@ -187,4 +187,9 @@ public class RepositoryPluginType extends BasePluginType implements PluginTypeIn
     return ( (RepositoryPlugin) annotation ).classLoaderGroup();
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

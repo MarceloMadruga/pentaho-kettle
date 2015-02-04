@@ -197,6 +197,11 @@ public class JobEntryPluginType extends BasePluginType implements PluginTypeInte
   }
 
   @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return ( (JobEntry) annotation ).svgImage();
+  }
+
+  @Override
   protected boolean extractSeparateClassLoader( Annotation annotation ) {
     return false;
   }

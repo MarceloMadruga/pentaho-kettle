@@ -189,4 +189,9 @@ public class PartitionerPluginType extends BasePluginType implements PluginTypeI
     return ( (PartitionerPlugin) annotation ).classLoaderGroup();
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }
