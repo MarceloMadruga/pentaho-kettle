@@ -43,6 +43,7 @@ public class Plugin implements PluginInterface {
   private String[] ids;
   private Class<? extends PluginTypeInterface> pluginType;
   private String imageFile;
+  private String svgImageFile;
   private boolean separateClassLoaderNeeded;
   private String classLoaderGroup;
   private boolean nativePlugin;
@@ -68,11 +69,20 @@ public class Plugin implements PluginInterface {
    * @param libraries
    */
   public Plugin( String[] ids, Class<? extends PluginTypeInterface> pluginType, Class<?> mainType,
+    String category, String name, String description, String imageFile, String svgImageFile, boolean separateClassLoaderNeeded,
+    boolean nativePlugin, Map<Class<?>, String> classMap, List<String> libraries, String errorHelpFile,
+    URL pluginFolder ) {
+    this(
+      ids, pluginType, mainType, category, name, description, imageFile, svgImageFile, separateClassLoaderNeeded,
+      nativePlugin, classMap, libraries, errorHelpFile, pluginFolder, null, null, null );
+  }
+
+  public Plugin( String[] ids, Class<? extends PluginTypeInterface> pluginType, Class<?> mainType,
     String category, String name, String description, String imageFile, boolean separateClassLoaderNeeded,
     boolean nativePlugin, Map<Class<?>, String> classMap, List<String> libraries, String errorHelpFile,
     URL pluginFolder ) {
     this(
-      ids, pluginType, mainType, category, name, description, imageFile, separateClassLoaderNeeded,
+      ids, pluginType, mainType, category, name, description, imageFile, null, separateClassLoaderNeeded,
       nativePlugin, classMap, libraries, errorHelpFile, pluginFolder, null, null, null );
   }
 
@@ -89,10 +99,18 @@ public class Plugin implements PluginInterface {
    * @param libraries
    */
   public Plugin( String[] ids, Class<? extends PluginTypeInterface> pluginType, Class<?> mainType,
+    String category, String name, String description, String imageFile, String svgImageFile, boolean separateClassLoaderNeeded,
+    boolean nativePlugin, Map<Class<?>, String> classMap, List<String> libraries, String errorHelpFile,
+    URL pluginFolder, String documentationUrl, String casesUrl, String forumUrl ) {
+    this( ids, pluginType, mainType, category, name, description, imageFile, svgImageFile, separateClassLoaderNeeded, null,
+      nativePlugin, classMap, libraries, errorHelpFile, pluginFolder, documentationUrl, casesUrl, forumUrl );
+  }
+
+  public Plugin( String[] ids, Class<? extends PluginTypeInterface> pluginType, Class<?> mainType,
     String category, String name, String description, String imageFile, boolean separateClassLoaderNeeded,
     boolean nativePlugin, Map<Class<?>, String> classMap, List<String> libraries, String errorHelpFile,
     URL pluginFolder, String documentationUrl, String casesUrl, String forumUrl ) {
-    this( ids, pluginType, mainType, category, name, description, imageFile, separateClassLoaderNeeded, null,
+    this( ids, pluginType, mainType, category, name, description, imageFile, null, separateClassLoaderNeeded, null,
       nativePlugin, classMap, libraries, errorHelpFile, pluginFolder, documentationUrl, casesUrl, forumUrl );
   }
 
@@ -116,7 +134,7 @@ public class Plugin implements PluginInterface {
    * @param forumUrl
    */
   public Plugin( String[] ids, Class<? extends PluginTypeInterface> pluginType, Class<?> mainType,
-    String category, String name, String description, String imageFile, boolean separateClassLoaderNeeded,
+    String category, String name, String description, String imageFile, String svgImageFile, boolean separateClassLoaderNeeded,
     String classLoaderGroup, boolean nativePlugin, Map<Class<?>, String> classMap, List<String> libraries,
     String errorHelpFile, URL pluginFolder, String documentationUrl, String casesUrl, String forumUrl ) {
 
@@ -127,6 +145,7 @@ public class Plugin implements PluginInterface {
     this.name = name;
     this.description = description;
     this.imageFile = imageFile;
+    this.svgImageFile = svgImageFile;
     this.separateClassLoaderNeeded = separateClassLoaderNeeded;
     this.classLoaderGroup = classLoaderGroup;
     this.nativePlugin = nativePlugin;
@@ -425,6 +444,20 @@ public class Plugin implements PluginInterface {
   @Override
   public void setClassLoaderGroup( String classLoaderGroup ) {
     this.classLoaderGroup = classLoaderGroup;
+  }
+
+  /**
+   * @return the svgImageFile
+   */
+  public String getSvgImageFile() {
+    return svgImageFile;
+  }
+
+  /**
+   * @param svgImageFile the svgImageFile to set
+   */
+  public void setSvgImageFile( String svgImageFile ) {
+    this.svgImageFile = svgImageFile;
   }
 
 }

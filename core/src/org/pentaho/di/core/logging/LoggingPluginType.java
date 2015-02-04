@@ -197,4 +197,10 @@ public class LoggingPluginType extends BasePluginType implements PluginTypeInter
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (LoggingPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

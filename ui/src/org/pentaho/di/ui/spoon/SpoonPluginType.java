@@ -120,4 +120,9 @@ public class SpoonPluginType extends BasePluginType implements PluginTypeInterfa
     return ( (SpoonPlugin) annotation ).classLoaderGroup();
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

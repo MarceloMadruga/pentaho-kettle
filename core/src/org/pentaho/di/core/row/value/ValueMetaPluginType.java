@@ -200,4 +200,10 @@ public class ValueMetaPluginType extends BasePluginType implements PluginTypeInt
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (ValueMetaPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

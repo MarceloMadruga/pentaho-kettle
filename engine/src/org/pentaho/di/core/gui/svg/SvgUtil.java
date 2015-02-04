@@ -1,6 +1,8 @@
 package org.pentaho.di.core.gui.svg;
 
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.net.URL;
 
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.bridge.DocumentLoader;
@@ -9,52 +11,48 @@ import org.apache.batik.bridge.UserAgentAdapter;
 import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
 import org.apache.batik.dom.svg.SVGOMDocument;
 import org.apache.batik.gvt.GraphicsNode;
-import org.apache.batik.util.XMLResourceDescriptor;
+import org.apache.xerces.jaxp.SAXParserImpl.JAXPSAXParser;
 
 public class SvgUtil {
+
+  private static SAXSVGDocumentFactory df = new SAXSVGDocumentFactory( JAXPSAXParser.class.getName() );
+
   /**
-   * Method to fetch the SVG icon from a url
+   * Load an SVG icon from a URL
    *
-   * @param url the url from which to fetch the SVG icon
+   * @param url locatin of the SVG icon
    *
-   * @return a graphics node object that can be used for painting
+   * @return a GraphicsNode which we can directly render onto a Graphics2D
    */
-  public static org.apache.batik.gvt.GraphicsNode getSvgIcon( java.net.URL url ) throws Exception {
-    GraphicsNode svgIcon = null;
+  public static GraphicsNode loadSvgIcon( URL url ) throws Exception {
+    GraphicsNode svgGraphicsNode = null;
     try {
-      String xmlParser = XMLResourceDescriptor.getXMLParserClassName();
-      SAXSVGDocumentFactory df = new SAXSVGDocumentFactory( xmlParser );
-      SVGOMDocument doc = df.createDocument( url.toString() );
-      UserAgentAdapter userAgent = new UserAgentAdapter();
-      DocumentLoader loader = new DocumentLoader( userAgent );
-      BridgeContext ctx = new BridgeContext( userAgent, loader );
+      // TODO: FIX SLOW SLOWNESS!!!
+      //
+      SVGOMDocument document = df.createDocument( url.toString() );
+      UserAgentAdapter userAgentAdapter = new UserAgentAdapter();
+      DocumentLoader documentLoader = new DocumentLoader( userAgentAdapter );
+      BridgeContext ctx = new BridgeContext( userAgentAdapter, documentLoader );
       GVTBuilder builder = new GVTBuilder();
-      svgIcon = builder.build( ctx, doc );
+      svgGraphicsNode = builder.build( ctx, document );
     } catch ( Exception e ) {
       throw new Exception( "Unable to load SVG icon from file: " + url, e );
     }
-    return svgIcon;
+    return svgGraphicsNode;
   }
 
   /**
-   * Method to paint the icon using Graphics2D. Note that the scaling factors have nothing to do with the zoom
-   * operation, the scaling factors set the size your icon relative to the other objects on your canvas.
-   *
-   * @param g the graphics context used for drawing
-   *
-   * @param svgIcon the graphics node object that contains the SVG icon information
-   *
-   * @param x the X coordinate of the top left corner of the icon
-   *
-   * @param y the Y coordinate of the top left corner of the icon
-   *
-   * @param scaleX the X scaling to be applied to the icon before drawing
-   * 
-   * @param scaleY the Y scaling to be applied to the icon before drawing
+   * Render the SVG icon on the specified Graphics2D context. 
+   * @param gc
+   * @param svgGraphicsNode
+   * @param positionX
+   * @param postionY
+   * @param scaleFactorX
+   * @param scaleFactorY
    */
-  public static void paintSvgIcon( java.awt.Graphics2D g, org.apache.batik.gvt.GraphicsNode svgIcon, int x, int y, double scaleX, double scaleY ) {
-    AffineTransform transform = new AffineTransform( scaleX, 0.0, 0.0, scaleY, x, y );
-    svgIcon.setTransform( transform );
-    svgIcon.paint( g );
+  public static void paintSvgIcon( Graphics2D gc, GraphicsNode svgGraphicsNode, int positionX, int postionY, double scaleFactorX, double scaleFactorY ) {
+    AffineTransform affineTransform = new AffineTransform( scaleFactorX, 0.0, 0.0, scaleFactorY, positionX, postionY );
+    svgGraphicsNode.setTransform( affineTransform );
+    svgGraphicsNode.paint( gc );
   }
 }

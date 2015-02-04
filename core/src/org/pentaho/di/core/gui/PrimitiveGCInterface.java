@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
 public interface PrimitiveGCInterface {
 
   public enum EColor {
-    BACKGROUND, BLACK, RED, YELLOW, ORANGE, GREEN, BLUE, MAGENTA, GRAY, LIGHTGRAY, DARKGRAY, LIGHTBLUE,
+    BACKGROUND, BLACK, RED, YELLOW, ORANGE, GREEN, BLUE, MAGENTA, GRAY, LIGHTGRAY, DARKGRAY, LIGHTBLUE, DARKBLUE,
   }
 
   public enum EFont {

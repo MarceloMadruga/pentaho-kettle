@@ -163,4 +163,10 @@ public class DatabasePluginType extends BasePluginType implements PluginTypeInte
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (DatabaseMetaPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

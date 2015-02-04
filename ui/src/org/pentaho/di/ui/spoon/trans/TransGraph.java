@@ -23,6 +23,7 @@
 
 package org.pentaho.di.ui.spoon.trans;
 
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +70,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -105,6 +107,7 @@ import org.pentaho.di.core.gui.GCInterface;
 import org.pentaho.di.core.gui.Point;
 import org.pentaho.di.core.gui.Redrawable;
 import org.pentaho.di.core.gui.SnapAllignDistribute;
+import org.pentaho.di.core.gui.svg.SwingSvgGC;
 import org.pentaho.di.core.logging.DefaultLogLevel;
 import org.pentaho.di.core.logging.HasLogChannelInterface;
 import org.pentaho.di.core.logging.KettleLogStore;
@@ -185,6 +188,7 @@ import org.pentaho.di.ui.spoon.dialog.NotePadDialog;
 import org.pentaho.di.ui.spoon.dialog.SearchFieldsProgressDialog;
 import org.pentaho.di.ui.spoon.job.JobGraph;
 import org.pentaho.di.ui.trans.dialog.TransDialog;
+import org.pentaho.di.ui.util.ImageUtil;
 import org.pentaho.di.ui.xul.KettleXulLoader;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -2986,34 +2990,45 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
   }
 
   public Image getTransformationImage( Device device, int x, int y, float magnificationFactor ) {
+    try {
+      // GCInterface gc = new SWTGC( device, new Point( x, y ), iconsize );
 
-    GCInterface gc = new SWTGC( device, new Point( x, y ), iconsize );
+      Point maximum = transMeta.getMaximum();
+      maximum.multiply( magnificationFactor );
 
-    TransPainter transPainter =
-      new TransPainter(
-        gc, transMeta, new Point( x, y ), new SwtScrollBar( hori ), new SwtScrollBar( vert ), candidate,
-        drop_candidate, selectionRegion, areaOwners, mouseOverSteps, PropsUI.getInstance().getIconSize(),
-        PropsUI.getInstance().getLineWidth(), PropsUI.getInstance().getCanvasGridSize(), PropsUI
-          .getInstance().getShadowSize(), PropsUI.getInstance().isAntiAliasingEnabled(), PropsUI
-          .getInstance().getNoteFont().getName(), PropsUI.getInstance().getNoteFont().getHeight(), trans,
-        PropsUI.getInstance().isIndicateSlowTransStepsEnabled() );
+      GCInterface gc = new SwingSvgGC( null, maximum, iconsize, 0, 0 );
 
-    transPainter.setMagnification( magnificationFactor );
-    transPainter.setStepLogMap( stepLogMap );
-    transPainter.setStartHopStep( startHopStep );
-    transPainter.setEndHopLocation( endHopLocation );
-    transPainter.setNoInputStep( noInputStep );
-    transPainter.setEndHopStep( endHopStep );
-    transPainter.setCandidateHopType( candidateHopType );
-    transPainter.setStartErrorHopStep( startErrorHopStep );
-    transPainter.setShowTargetStreamsStep( showTargetStreamsStep );
+      TransPainter transPainter =
+        new TransPainter(
+          gc, transMeta, new Point( x, y ), new SwtScrollBar( hori ), new SwtScrollBar( vert ), candidate,
+          drop_candidate, selectionRegion, areaOwners, mouseOverSteps, PropsUI.getInstance().getIconSize(),
+          PropsUI.getInstance().getLineWidth(), PropsUI.getInstance().getCanvasGridSize(), PropsUI
+            .getInstance().getShadowSize(), PropsUI.getInstance().isAntiAliasingEnabled(), PropsUI
+            .getInstance().getNoteFont().getName(), PropsUI.getInstance().getNoteFont().getHeight(), trans,
+          PropsUI.getInstance().isIndicateSlowTransStepsEnabled() );
 
-    transPainter.buildTransformationImage();
+      transPainter.setMagnification( magnificationFactor );
+      transPainter.setStepLogMap( stepLogMap );
+      transPainter.setStartHopStep( startHopStep );
+      transPainter.setEndHopLocation( endHopLocation );
+      transPainter.setNoInputStep( noInputStep );
+      transPainter.setEndHopStep( endHopStep );
+      transPainter.setCandidateHopType( candidateHopType );
+      transPainter.setStartErrorHopStep( startErrorHopStep );
+      transPainter.setShowTargetStreamsStep( showTargetStreamsStep );
 
-    Image img = (Image) gc.getImage();
+      transPainter.buildTransformationImage();
+      BufferedImage bufferedImage = (BufferedImage) gc.getImage();
 
-    gc.dispose();
-    return img;
+      ImageData imageData = ImageUtil.convertToSWT( bufferedImage );
+      Image img = new Image( device, imageData );
+
+      gc.dispose();
+      return img;
+    } catch ( Exception e ) {
+      new ErrorDialog( shell, "Error", "Rendering error", e );
+      return null; // kill!
+    }
   }
 
   protected Point getOffset() {
@@ -3915,14 +3930,13 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
       return;
     }
 
-
     getDisplay().asyncExec( new Runnable() {
 
       public void run() {
         boolean operationsNotAllowed = false;
         try {
           operationsNotAllowed = RepositorySecurityUI.verifyOperations( shell, spoon.rep, false,
-              RepositoryOperation.EXECUTE_TRANSFORMATION );
+            RepositoryOperation.EXECUTE_TRANSFORMATION );
         } catch ( KettleRepositoryLostException krle ) {
           log.logError( krle.getLocalizedMessage() );
         }

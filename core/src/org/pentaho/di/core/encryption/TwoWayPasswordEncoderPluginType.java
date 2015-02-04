@@ -199,4 +199,10 @@ public class TwoWayPasswordEncoderPluginType extends BasePluginType implements P
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (TwoWayPasswordEncoderPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

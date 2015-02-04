@@ -61,6 +61,7 @@ public class SWTGC implements GCInterface {
   protected Color lightGray;
   protected Color darkGray;
   protected Color lightBlue;
+  protected Color darkBlue;
 
   private GC gc;
 
@@ -98,6 +99,7 @@ public class SWTGC implements GCInterface {
     this.lightGray = GUIResource.getInstance().getColorLightGray();
     this.darkGray = GUIResource.getInstance().getColorDarkGray();
     this.lightBlue = GUIResource.getInstance().getColorLightBlue();
+    this.darkBlue = GUIResource.getInstance().getColorDarkBlue();
 
   }
 

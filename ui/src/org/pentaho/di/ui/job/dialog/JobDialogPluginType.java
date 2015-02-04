@@ -143,4 +143,10 @@ public class JobDialogPluginType extends BasePluginType implements PluginTypeInt
   protected String extractClassLoaderGroup( Annotation annotation ) {
     return ( (JobDialogPlugin) annotation ).classLoaderGroup();
   }
+
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

@@ -75,6 +75,11 @@ public interface PluginInterface {
   public String getImageFile();
 
   /**
+   * @return The location of the SVG image (icon) file for this plugin
+   */
+  public String getSvgImageFile();
+
+  /**
    * @return The category of this plugin or null if this is not applicable
    */
   public String getCategory();

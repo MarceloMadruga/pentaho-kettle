@@ -123,6 +123,8 @@ public class GUIResource {
 
   private ManagedColor colorLightBlue;
 
+  private ManagedColor colorDarkBlue;
+
   private ManagedColor colorCrystalTextPentaho;
 
   /* * * Fonts * * */
@@ -358,7 +360,6 @@ public class GUIResource {
 
   private Image imageRemoveSingle;
 
-
   /**
    * GUIResource also contains the clipboard as it has to be allocated only once! I don't want to put it in a separate
    * singleton just for this one member.
@@ -437,6 +438,7 @@ public class GUIResource {
     colorDarkGray = new ManagedColor( display, 100, 100, 100 );
     colorBlack = new ManagedColor( display, 0, 0, 0 );
     colorLightBlue = new ManagedColor( display, 135, 206, 250 ); // light sky blue
+    colorDarkBlue = new ManagedColor( display, 0, 0, 200 );
 
     colorDirectory = new ManagedColor( display, 0, 0, 255 );
     // colorPentaho = new ManagedColor(display, 239, 128, 51 ); // Orange
@@ -1215,6 +1217,13 @@ public class GUIResource {
    */
   public Color getColorLightBlue() {
     return colorLightBlue.getColor();
+  }
+
+  /**
+   * @return Returns the colorDarkBlue.
+   */
+  public Color getColorDarkBlue() {
+    return colorDarkBlue.getColor();
   }
 
   /**

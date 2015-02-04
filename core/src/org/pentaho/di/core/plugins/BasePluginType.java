@@ -330,13 +330,37 @@ public abstract class BasePluginType implements PluginTypeInterface {
    * @throws KettlePluginException
    */
   public void registerCustom( Class<?> clazz, String cat, String id, String name, String desc, String image ) throws KettlePluginException {
+    registerCustom( clazz, cat, id, name, desc, image, null );
+  }
+
+  /**
+   * This method allows for custom registration of plugins that are on the main classpath. This was originally created
+   * so that test environments could register test plugins programmatically.
+   *
+   * @param clazz
+   *          the plugin implementation to register
+   * @param category
+   *          the category of the plugin
+   * @param id
+   *          the id for the plugin
+   * @param name
+   *          the name for the plugin
+   * @param description
+   *          the description for the plugin
+   * @param image
+   *          the image for the plugin
+   * @param svgImage 
+   *          the SVG image file for the plugin (optional)
+   * @throws KettlePluginException
+   */
+  public void registerCustom( Class<?> clazz, String cat, String id, String name, String desc, String image, String svgImage ) throws KettlePluginException {
     Class<? extends PluginTypeInterface> pluginType = getClass();
     Map<Class<?>, String> classMap = new HashMap<Class<?>, String>();
     PluginMainClassType mainClassTypesAnnotation = pluginType.getAnnotation( PluginMainClassType.class );
     classMap.put( mainClassTypesAnnotation.value(), clazz.getName() );
     PluginInterface stepPlugin =
       new Plugin(
-        new String[] { id }, pluginType, mainClassTypesAnnotation.value(), cat, name, desc, image, false,
+        new String[] { id }, pluginType, mainClassTypesAnnotation.value(), cat, name, desc, image, svgImage, false,
         false, classMap, new ArrayList<String>(), null, null, null, null, null );
     registry.registerPlugin( pluginType, stepPlugin );
   }
@@ -348,6 +372,7 @@ public abstract class BasePluginType implements PluginTypeInterface {
       String id = XMLHandler.getTagAttribute( pluginNode, "id" );
       String description = getTagOrAttribute( pluginNode, "description" );
       String iconfile = getTagOrAttribute( pluginNode, "iconfile" );
+      String svgIconfile = getTagOrAttribute( pluginNode, "iconfile_svg" );
       String tooltip = getTagOrAttribute( pluginNode, "tooltip" );
       String category = getTagOrAttribute( pluginNode, "category" );
       String classname = getTagOrAttribute( pluginNode, "classname" );
@@ -412,7 +437,7 @@ public abstract class BasePluginType implements PluginTypeInterface {
       PluginInterface pluginInterface =
         new Plugin(
           id.split( "," ), pluginType, mainClassTypesAnnotation.value(), category, description, tooltip,
-          iconFilename, false, nativePlugin, classMap, jarFiles, errorHelpFileFull, pluginFolder,
+          iconFilename, svgIconfile, false, nativePlugin, classMap, jarFiles, errorHelpFileFull, pluginFolder,
           documentationUrl, casesUrl, forumUrl );
       registry.registerPlugin( pluginType, pluginInterface );
 
@@ -526,6 +551,8 @@ public abstract class BasePluginType implements PluginTypeInterface {
   protected abstract String extractCategory( java.lang.annotation.Annotation annotation );
 
   protected abstract String extractImageFile( java.lang.annotation.Annotation annotation );
+
+  protected abstract String extractSvgImageFile( java.lang.annotation.Annotation annotation );
 
   protected abstract boolean extractSeparateClassLoader( java.lang.annotation.Annotation annotation );
 
@@ -646,6 +673,7 @@ public abstract class BasePluginType implements PluginTypeInterface {
     String description = getTranslation( extractDesc( annotation ), packageName, altPackageName, clazz );
     String category = getTranslation( extractCategory( annotation ), packageName, altPackageName, clazz );
     String imageFile = extractImageFile( annotation );
+    String svgImageFile = extractSvgImageFile( annotation );
     boolean separateClassLoader = extractSeparateClassLoader( annotation );
     String documentationUrl = extractDocumentationUrl( annotation );
     String casesUrl = extractCasesUrl( annotation );
@@ -670,7 +698,7 @@ public abstract class BasePluginType implements PluginTypeInterface {
 
     PluginInterface plugin =
       new Plugin(
-        ids, this.getClass(), mainType.value(), category, name, description, imageFile, separateClassLoader,
+        ids, this.getClass(), mainType.value(), category, name, description, imageFile, svgImageFile, separateClassLoader,
         nativePluginType, classMap, libraries, null, pluginFolder, documentationUrl, casesUrl, forumUrl );
     ParentFirst parentFirstAnnotation = clazz.getAnnotation( ParentFirst.class );
     if ( parentFirstAnnotation != null ) {

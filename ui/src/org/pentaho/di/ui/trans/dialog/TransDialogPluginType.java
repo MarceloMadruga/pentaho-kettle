@@ -143,4 +143,9 @@ public class TransDialogPluginType extends BasePluginType implements PluginTypeI
     return ( (TransDialogPlugin) annotation ).classLoaderGroup();
   }
 
+  @Override
+  protected String extractSvgImageFile( Annotation annotation ) {
+    return "";
+  }
+
 }

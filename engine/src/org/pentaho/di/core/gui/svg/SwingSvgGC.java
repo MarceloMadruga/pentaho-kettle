@@ -612,7 +612,7 @@ public class SwingSvgGC implements GCInterface {
               try {
                 // AAAAAAAAAAARRRRRRRGHHHH SO SLOW!!!
                 //
-                svgIcon = SvgUtil.getSvgIcon( svgFile.toURI().toURL() );
+                svgIcon = SvgUtil.loadSvgIcon( svgFile.toURI().toURL() );
                 cache.store( stepMeta, svgIcon );
               } catch ( Exception e ) {
                 throw new RuntimeException( "SVG Image loading error", e );
