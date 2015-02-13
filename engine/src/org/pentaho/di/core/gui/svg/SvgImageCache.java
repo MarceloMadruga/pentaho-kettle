@@ -4,18 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.batik.gvt.GraphicsNode;
-import org.pentaho.di.trans.step.StepMeta;
 
 public class SvgImageCache {
   private static SvgImageCache cache;
 
-  private Map<StepMeta, Boolean> stepSvgFlag;
-  private Map<StepMeta, GraphicsNode> stepNodeCache;
+  private Map<String, Boolean> stepSvgFlag;
+  private Map<String, GraphicsNode> stepNodeCache;
 
   private SvgImageCache() {
-    stepNodeCache = new HashMap<StepMeta, GraphicsNode>();
-    stepSvgFlag = new HashMap<StepMeta, Boolean>();
-
+    stepNodeCache = new HashMap<String, GraphicsNode>();
+    stepSvgFlag = new HashMap<String, Boolean>();
   }
 
   public static SvgImageCache getInstance() {
@@ -25,20 +23,20 @@ public class SvgImageCache {
     return cache;
   }
 
-  public void store( StepMeta stepMeta, GraphicsNode svgNode ) {
-    stepNodeCache.put( stepMeta, svgNode );
+  public void storeStepSvg( String pluginId, GraphicsNode svgNode ) {
+    stepNodeCache.put( pluginId, svgNode );
   }
 
-  public GraphicsNode retrieve( StepMeta stepMeta ) {
-    return stepNodeCache.get( stepMeta );
+  public GraphicsNode retrieveStepSvg( String pluginId ) {
+    return stepNodeCache.get( pluginId );
   }
 
-  public void markSvg( StepMeta stepMeta, boolean flag ) {
-    stepSvgFlag.put( stepMeta, new Boolean( flag ) );
+  public void markStepSvg( String pluginId, boolean flag ) {
+    stepSvgFlag.put( pluginId, new Boolean( flag ) );
   }
 
-  public Boolean isSvg( StepMeta stepMeta ) {
-    return stepSvgFlag.get( stepMeta );
+  public Boolean isStepSvg( String pluginId ) {
+    return stepSvgFlag.get( pluginId );
   }
 
 }

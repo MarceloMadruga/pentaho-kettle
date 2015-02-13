@@ -685,14 +685,14 @@ public class TransPainter extends BasePainter {
     }
 
     gc.setBackground( EColor.BACKGROUND );
-    gc.fillRectangle( x - 1, y - 1, iconsize + 1, iconsize + 1 );
+    gc.fillRoundRectangle( x - 2, y - 2, iconsize + 4, iconsize + 4, 15, 15 );
     gc.drawStepIcon( x, y, stepMeta );
     if ( stepError ) {
       gc.setForeground( EColor.RED );
     } else {
       gc.setForeground( EColor.DARKBLUE );
     }
-    gc.drawRoundRectangle( x - 1, y - 1, iconsize + 1, iconsize + 1, 8, 8 );
+    gc.drawRoundRectangle( x - 2, y - 2, iconsize + 4, iconsize + 4, 15, 15 );
 
     Point namePosition = getNamePosition( name, screen, iconsize );
 
@@ -887,7 +887,7 @@ public class TransPainter extends BasePainter {
         }
         targetsWidth += MINI_ICON_MARGIN;
 
-        gc.setBackground( EColor.LIGHTGRAY );
+        gc.setBackground( EColor.BACKGROUND );
         gc.fillRoundRectangle( areaX, areaY + totalHeight + 2, targetsWidth, targetsHeight, 7, 7 );
         gc.drawRoundRectangle( areaX, areaY + totalHeight + 2, targetsWidth, targetsHeight, 7, 7 );
 

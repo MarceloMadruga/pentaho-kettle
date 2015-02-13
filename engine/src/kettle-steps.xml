@@ -6,7 +6,7 @@
   <category>i18n:org.pentaho.di.trans.step:BaseStep.Category.Flow</category> 
   <tooltip>i18n:org.pentaho.di.trans.step:BaseStep.TypeTooltipDesc.Dummy</tooltip> 
   <iconfile>ui/images/DUM.png</iconfile> 
-  <iconfile_svg>ui/images/DUM.svg</iconfile_svg>
+<!-- <iconfile_svg>ui/images/DUM.svg</iconfile_svg>  -->
   <documentation_url>http://wiki.pentaho.com/display/EAI/Dummy+%28do+nothing%29</documentation_url> 
   <cases_url/> 
   <forum_url/> 

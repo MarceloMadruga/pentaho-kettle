@@ -34,7 +34,7 @@ import org.pentaho.di.trans.step.errorhandling.StreamIcon;
 
 public class BasePainter {
 
-  public final double theta = Math.toRadians( 11 ); // arrowhead sharpness
+  public final double theta = Math.toRadians( 8 ); // arrowhead sharpness
 
   protected static final int MINI_ICON_SIZE = 16;
   protected static final int MINI_ICON_MARGIN = 5;

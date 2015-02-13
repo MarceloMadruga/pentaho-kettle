@@ -2,6 +2,7 @@ package org.pentaho.di.core.gui.svg;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.batik.bridge.BridgeContext;
@@ -13,9 +14,11 @@ import org.apache.batik.dom.svg.SVGOMDocument;
 import org.apache.batik.gvt.GraphicsNode;
 import org.apache.xerces.jaxp.SAXParserImpl.JAXPSAXParser;
 
-public class SvgUtil {
+import com.kitfox.svg.SVGCache;
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGUniverse;
 
-  private static SAXSVGDocumentFactory df = new SAXSVGDocumentFactory( JAXPSAXParser.class.getName() );
+public class SvgUtil {
 
   /**
    * Load an SVG icon from a URL
@@ -27,18 +30,30 @@ public class SvgUtil {
   public static GraphicsNode loadSvgIcon( URL url ) throws Exception {
     GraphicsNode svgGraphicsNode = null;
     try {
+      SAXSVGDocumentFactory df = new SAXSVGDocumentFactory( JAXPSAXParser.class.getName() );
+
       // TODO: FIX SLOW SLOWNESS!!!
+      // JAXP Apparently doesn't do non-validating, always loads referenced DTDs
       //
+      df.setValidating( false );
+
       SVGOMDocument document = df.createDocument( url.toString() );
       UserAgentAdapter userAgentAdapter = new UserAgentAdapter();
       DocumentLoader documentLoader = new DocumentLoader( userAgentAdapter );
       BridgeContext ctx = new BridgeContext( userAgentAdapter, documentLoader );
       GVTBuilder builder = new GVTBuilder();
       svgGraphicsNode = builder.build( ctx, document );
+      return svgGraphicsNode;
     } catch ( Exception e ) {
       throw new Exception( "Unable to load SVG icon from file: " + url, e );
     }
-    return svgGraphicsNode;
+  }
+
+  public static SVGDiagram getSvgIconDiagram( URL url ) throws Exception {
+    SVGUniverse universe = SVGCache.getSVGUniverse();
+    URI svgURI = universe.loadSVG( url );
+    SVGDiagram diagram = universe.getDiagram( svgURI );
+    return diagram;
   }
 
   /**

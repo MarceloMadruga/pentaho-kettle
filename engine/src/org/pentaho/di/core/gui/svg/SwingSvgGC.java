@@ -589,50 +589,47 @@ public class SwingSvgGC implements GCInterface {
 
   public void drawStepIcon( int x, int y, StepMeta stepMeta ) {
 
+    StepMetaInterface pluginInstance = stepMeta.getStepMetaInterface();
+    PluginInterface stepPlugin = PluginRegistry.getInstance().getPlugin( StepPluginType.class, pluginInstance );
+    if ( stepPlugin == null ) {
+      return;
+    }
+    String pluginId = stepPlugin.getIds()[0];
+
     SvgImageCache cache = SvgImageCache.getInstance();
-    Boolean svg = cache.isSvg( stepMeta );
+    Boolean svg = cache.isStepSvg( pluginId );
     if ( svg == null || svg.booleanValue() ) {
-      GraphicsNode svgIcon = cache.retrieve( stepMeta );
+      GraphicsNode svgIcon = cache.retrieveStepSvg( pluginId );
       if ( svgIcon == null ) {
-        StepMetaInterface pluginInstance = stepMeta.getStepMetaInterface();
+        String svgIconFile = stepPlugin.getSvgImageFile();
+        if ( svgIconFile == null ) {
+          // retry with a string replace...
+          //
+          svgIconFile = stepPlugin.getImageFile().replace( ".png", ".svg" );
+        }
 
-        PluginInterface stepPlugin = PluginRegistry.getInstance().getPlugin( StepPluginType.class, pluginInstance );
-        if ( stepPlugin != null ) {
-          String svgIconFile = stepPlugin.getSvgImageFile();
-          if ( svgIconFile == null ) {
-            // retry with a string replace...
+        File svgFile = new File( svgIconFile );
+        if ( svgFile.exists() ) {
+          try {
+            // AAAAAAAAAAARRRRRRRGHHHH SO SLOW!!!
             //
-            svgIconFile = stepPlugin.getImageFile().replace( ".png", ".svg" );
-          }
-
-          File svgFile = new File( svgIconFile );
-          if ( svgFile.exists() ) {
-            svgIcon = cache.retrieve( stepMeta );
-            if ( svgIcon == null ) {
-              try {
-                // AAAAAAAAAAARRRRRRRGHHHH SO SLOW!!!
-                //
-                svgIcon = SvgUtil.loadSvgIcon( svgFile.toURI().toURL() );
-                cache.store( stepMeta, svgIcon );
-              } catch ( Exception e ) {
-                throw new RuntimeException( "SVG Image loading error", e );
-              }
-            }
-          } else {
-            cache.markSvg( stepMeta, false );
+            svgIcon = SvgUtil.loadSvgIcon( svgFile.toURI().toURL() );
+            cache.storeStepSvg( pluginId, svgIcon );
+          } catch ( Exception e ) {
+            throw new RuntimeException( "SVG Image loading error", e );
           }
         } else {
-          cache.markSvg( stepMeta, false );
+          cache.markStepSvg( pluginId, false );
         }
       } else {
-        cache.markSvg( stepMeta, false );
+        cache.markStepSvg( pluginId, false );
       }
 
       // Did we get the SVG DOM from somewhere?
       //
       if ( svgIcon != null ) {
         SvgUtil.paintSvgIcon( gc, svgIcon, x - 3, y - 3, 0.85 * iconsize / 32.0, 0.85 * iconsize / 32.0 );
-        cache.markSvg( stepMeta, true );
+        cache.markStepSvg( pluginId, true );
         return;
       }
     }
