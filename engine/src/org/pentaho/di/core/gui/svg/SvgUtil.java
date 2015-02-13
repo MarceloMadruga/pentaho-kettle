@@ -2,7 +2,6 @@ package org.pentaho.di.core.gui.svg;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.net.URI;
 import java.net.URL;
 
 import org.apache.batik.bridge.BridgeContext;
@@ -10,13 +9,9 @@ import org.apache.batik.bridge.DocumentLoader;
 import org.apache.batik.bridge.GVTBuilder;
 import org.apache.batik.bridge.UserAgentAdapter;
 import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
-import org.apache.batik.dom.svg.SVGOMDocument;
 import org.apache.batik.gvt.GraphicsNode;
 import org.apache.xerces.jaxp.SAXParserImpl.JAXPSAXParser;
-
-import com.kitfox.svg.SVGCache;
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGUniverse;
+import org.w3c.dom.Document;
 
 public class SvgUtil {
 
@@ -34,10 +29,14 @@ public class SvgUtil {
 
       // TODO: FIX SLOW SLOWNESS!!!
       // JAXP Apparently doesn't do non-validating, always loads referenced DTDs
+      // So the next line doesn't do anything at all
       //
       df.setValidating( false );
 
-      SVGOMDocument document = df.createDocument( url.toString() );
+      // Ant build causes error: incompatible types on next line:
+      //
+      Document document = df.createDocument( url.toString() );
+
       UserAgentAdapter userAgentAdapter = new UserAgentAdapter();
       DocumentLoader documentLoader = new DocumentLoader( userAgentAdapter );
       BridgeContext ctx = new BridgeContext( userAgentAdapter, documentLoader );
@@ -47,13 +46,6 @@ public class SvgUtil {
     } catch ( Exception e ) {
       throw new Exception( "Unable to load SVG icon from file: " + url, e );
     }
-  }
-
-  public static SVGDiagram getSvgIconDiagram( URL url ) throws Exception {
-    SVGUniverse universe = SVGCache.getSVGUniverse();
-    URI svgURI = universe.loadSVG( url );
-    SVGDiagram diagram = universe.getDiagram( svgURI );
-    return diagram;
   }
 
   /**
